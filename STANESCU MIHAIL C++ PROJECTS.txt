@@ -1,0 +1,527 @@
+1)Login and Registration System
+
+#include <iostream>
+#include<fstream>
+#include<string>
+
+using namespace std;
+
+bool IsLoggedIn()
+{
+    string username, password, un, pw;
+
+    cout<<"Enter username:"; cin>>username;
+    cout<<"Enter password:"; cin>>password;
+
+    ifstream read("data\\"+username+".txt");
+    getline(read,un);
+    getline(read,pw);
+
+    if((un==username) && (pw=password))
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+int main()
+{
+    int choice;
+
+    cout<<"1: Register\n2: Login\nYour choice:"; cin>>choice;
+    if(choice==1)
+    {
+        string username, password;
+
+        cout<<"Select a username:"; cin>>username;
+        cout<<"Select a password"; cin>>password;
+
+        ofstream file;
+        file("data\\"+username+".txt");
+        file<<username<<endl<<password;
+        file.close();
+
+        main();
+    }
+
+    else if(choice==2)
+    {
+        bool status=IsLoggedIn();
+
+        if(!status)
+        {
+            cout<<"False Login"<<endl;
+            system("PAUSE");
+            return 0;
+        }
+        else
+        {
+            cout<<"Succesfully logged in!"<<endl;
+            system("PAUSE");
+            return 1;
+        }
+    }
+}
+
+
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+2)Bookshop inventory system
+
+#include<iostream>
+#include<string.h>
+#include<stdlib.h>
+
+using namespace std;
+
+class book	{
+private:
+	char *author,*title,*publisher;
+	float *price;
+	int *stock;
+public:	
+	book()	{
+	author= new char[20];
+	title=new char[20];
+	publisher=new char[20];
+	price= new float;
+	stock=new int;
+	}
+	void feeddata();
+	void editdata();
+	void showdata();
+	int search(char[],char[]);
+	void buybook();
+	
+};
+
+void book::feeddata()	{
+	cin.ignore();
+	cout<<"\nEnter Author Name: ";      cin.getline(author,20);
+	cout<<"Enter Title Name: ";       cin.getline(title,20);
+	cout<<"Enter Publisher Name: ";   cin.getline(publisher,20);
+	cout<<"Enter Price: ";            cin>>*price;
+	cout<<"Enter Stock Position: ";   cin>>*stock;   
+	
+}
+
+void book::editdata()	{
+	
+	cout<<"\nEnter Author Name: ";      cin.getline(author,20);
+	cout<<"Enter Title Name: ";       cin.getline(title,20);
+	cout<<"Enter Publisher Name: ";   cin.getline(publisher,20);
+	cout<<"Enter Price: ";            cin>>*price;
+	cout<<"Enter Stock Position: ";   cin>>*stock;   
+	
+}
+
+void book::showdata()	{
+	cout<<"\nAuthor Name: "<<author;
+	cout<<"\nTitle Name: "<<title;
+	cout<<"\nPublisher Name: "<<publisher;
+	cout<<"\nPrice: "<<*price;
+	cout<<"\nStock Position: "<<*stock;   
+	
+}
+
+int book::search(char tbuy[20],char abuy[20] )	{
+	if(strcmp(tbuy,title)==0 && strcmp(abuy,author)==0)
+		return 1;
+	else return 0;
+		
+}
+
+void book::buybook()	{
+	int count;
+	cout<<"\nEnter Number Of Books to buy: ";
+	cin>>count;
+	if(count<=*stock)	{
+		*stock=*stock-count;
+		cout<<"\nBooks Bought Sucessfully";
+		cout<<"\nAmount: Rs. "<<(*price)*count;
+	}
+	else
+		cout<<"\nRequired Copies not in Stock";
+}
+
+int main()	{
+	book *B[20];
+	int i=0,r,t,choice;
+	char titlebuy[20],authorbuy[20];
+	while(1)	{
+		cout<<"\n\n\t\tMENU"
+		<<"\n1. Entry of New Book"
+		<<"\n2. Buy Book"
+		<<"\n3. Search For Book"
+		<<"\n4. Edit Details Of Book"
+		<<"\n5. Exit"
+		<<"\n\nEnter your Choice: ";
+		cin>>choice;
+		
+		switch(choice)	{
+			case 1:	B[i] = new book;
+				B[i]->feeddata();
+				i++;	break;
+				
+			case 2: cin.ignore();
+				cout<<"\nEnter Title Of Book: "; cin.getline(titlebuy,20);
+				cout<<"Enter Author Of Book: ";  cin.getline(authorbuy,20);
+				for(t=0;t<i;t++)	{
+					if(B[t]->search(titlebuy,authorbuy))	{
+						B[t]->buybook();
+						break;
+					}
+				}
+				if(t==1)
+				cout<<"\nThis Book is Not in Stock";
+				
+				break;
+			case 3: cin.ignore();
+				cout<<"\nEnter Title Of Book: "; cin.getline(titlebuy,20);
+				cout<<"Enter Author Of Book: ";  cin.getline(authorbuy,20);
+				
+				for(t=0;t<i;t++)	{
+					if(B[t]->search(titlebuy,authorbuy))	{
+						cout<<"\nBook Found Successfully";
+						B[t]->showdata();
+						break;
+					}
+				}
+				if(t==i)
+				cout<<"\nThis Book is Not in Stock";
+				break;
+			
+			case 4: cin.ignore();
+				cout<<"\nEnter Title Of Book: "; cin.getline(titlebuy,20);
+				cout<<"Enter Author Of Book: ";  cin.getline(authorbuy,20);
+				
+				for(t=0;t<i;t++)	{
+					if(B[t]->search(titlebuy,authorbuy))	{
+						cout<<"\nBook Found Successfully";
+						B[t]->editdata();
+						break;
+					}
+				}
+				if(t==i)
+				cout<<"\nThis Book is Not in Stock";
+				break;
+			
+			case 5: exit(0);
+			default: cout<<"\nInvalid Choice Entered";
+			
+		}
+	}
+	
+	
+	
+	
+	return 0;
+}
+
+
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+3)Casino Number Guessing Game
+
+#include <iostream>
+#include <string> // Needed to use strings
+#include <cstdlib> // Needed to use random numbers
+#include <ctime>
+using namespace std;
+void rules();
+int main()
+{
+    string playerName;
+    int balance; // stores player's balance
+    int bettingAmount;
+    int guess;
+    int dice; // stores the random number
+    char choice;
+    srand(time(0)); // "Seed" the random generator
+    cout << "\n\t\t========WELCOME TO CASINO WORLD=======\n\n";
+    cout << "\n\nWhat's your Name : ";
+    getline(cin, playerName);
+    cout << "\n\nEnter the starting balance to play game : $";
+    cin >> balance;
+    do
+    {
+        system("cls");
+        rules();
+        cout << "\n\nYour current balance is $ " << balance << "\n";
+// Get player's betting balance
+        do
+        {
+            cout << "Hey, " << playerName<<", enter amount to bet : $";
+            cin >> bettingAmount;
+            if(bettingAmount > balance)
+                cout << "Betting balance can't be more than current balance!\n"
+                       <<"\nRe-enter balance\n ";
+        }while(bettingAmount > balance);
+// Get player's numbers
+        do
+        {
+            cout << "Guess any betting number between 1 & 10 :";
+            cin >> guess;
+            if(guess <= 0 || guess > 10)
+                cout << "\nNumber should be between 1 to 10\n"
+                    <<"Re-enter number:\n ";
+        }while(guess <= 0 || guess > 10);
+        dice = rand()%10 + 1;
+        if(dice == guess)
+        {
+            cout << "\n\nYou are in luck!! You have won Rs." << bettingAmount * 10;
+            balance = balance + bettingAmount * 10;
+        }
+        else
+        {
+            cout << "Oops, better luck next time !! You lost $ "<< bettingAmount <<"\n";
+            balance = balance - bettingAmount;
+        }
+        cout << "\nThe winning number was : " << dice <<"\n";
+        cout << "\n"<<playerName<<", You have balance of $ " << balance << "\n";
+        if(balance == 0)
+        {
+            cout << "You have no money to play ";
+            break;
+        }
+        cout << "\n\n-->Do you want to play again (y/n)? ";
+        cin >> choice;
+    }while(choice =='Y'|| choice=='y');
+    cout << "\n\n\n";
+    cout << "\n\nThanks for playing the game. Your balance is $ " << balance << "\n\n";
+    return 0;
+}
+void rules()
+{
+    system("cls");
+    cout << "\t\t======CASINO NUMBER GUESSING RULES!======\n";
+    cout << "\t1. Choose a number between 1 to 10\n";
+    cout << "\t2. Winner gets 10 times of the money bet\n";
+    cout << "\t3. Wrong bet, and you lose the amount you bet\n\n";
+}
+
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+4)Sudoku Game 
+
+#include <iostream>
+#include <cstdio>
+#include <cstring>
+#include <cstdlib>
+using namespace std;
+#define empty 0
+#define N 9
+bool isGridSafe(int grid[N][N], int row, int col, int num);
+bool isEmptyLocation(int grid[N][N], int &row, int &col);
+/* assign values to all the zero (not assigned) values for Sudoku solution
+ */
+bool SolveSudoku(int grid[N][N])
+{
+    int row, col;
+    if (!isEmptyLocation(grid, row, col))
+       return true;
+    for (int num = 1; num <= 9; num++)
+    {
+        if (isGridSafe(grid, row, col, num))
+        {
+            grid[row][col] = num;
+            if (SolveSudoku(grid))
+                return true;
+            grid[row][col] = empty;
+        }
+    }
+    return false;
+}
+/* Check for entries that don't have a value. */
+bool isEmptyLocation(int grid[N][N], int &row, int &col)
+{
+    for (row = 0; row < N; row++)
+        for (col = 0; col < N; col++)
+            if (grid[row][col] == empty)
+                return true;
+    return false;
+}
+/* Returns whether the assigned entry n in the particular row matches
+   the given number num. */
+bool UsedInRow(int grid[N][N], int prow, int number)
+{
+    for (int col = 0; col < N; col++)
+        if (grid[prow][col] == number)
+            return true;
+    return false;
+}
+/* Returns true if the number num matches any number in the column */
+bool UsedInCol(int grid[N][N], int pcol, int number)
+{
+    for (int row = 0; row < N; row++)
+        if (grid[row][pcol] == number)
+            return true;
+  else 
+     return false;
+//Check if the entry used already in the grid box
+bool UsedInBox(int grid[N][N], int boxBeginRow, int boxBeginCol, int number)
+
+{
+    bool tf = false;
+    for (int row = 0; row < 3; row++)
+        for (int col = 0; col < 3; col++)
+            if (grid[row+boxBeginRow][col+boxBeginCol] == number)
+                tf = true;
+    return tf;
+}
+/* Checks if num can be assigned to a given prow,pcol location. */
+bool isGridSafe(int grid[N][N], int prow, int pcol, int number)
+{
+    return !UsedInRow(grid, prow, number) && !UsedInCol(grid, pcol, number) &&
+           !UsedInBox(grid, prow - prow % 3 , pcol - pcol % 3, number);
+}
+/* print result  */
+void printResult(int finalgrid[N][N])
+{
+    for (int row = 0; row < N; row++)
+    {
+        for (int col = 0; col < N; col++)
+            cout<< finalgrid[row][col]<<"  ";
+        cout<<endl;
+    }
+}
+/* Main */
+int main()
+{
+    int grid[N][N] = {{0, 0, 0, 0, 0, 0, 0, 0, 0},
+                      {0, 0, 0, 0, 0, 3, 0, 8, 5},
+                      {0, 0, 1, 0, 2, 0, 0, 0, 0},
+                      {0, 0, 0, 5, 0, 7, 0, 0, 0},
+                      {0, 0, 4, 0, 0, 0, 1, 0, 0},
+                      {0, 9, 0, 0, 0, 0, 0, 0, 0},
+                      {5, 0, 0, 0, 0, 0, 0, 7, 3},
+                      {0, 0, 2, 0, 1, 0, 0, 0, 0},
+                      {0, 0, 0, 0, 4, 0, 0, 0, 9}}; 
+if (SolveSudoku(grid) == true)
+          printResult(grid);
+    else
+        cout<<"No solution found"<<endl;
+    return 0;
+}
+
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+5)Flappy Bird
+
+#include <iostream>
+#include <windows.h>
+#include <conio.h>
+#include <time.h>
+using namespace std;
+
+int main()
+{
+    srand(time(0));//to make the program randomize
+    char mv;
+    char repeat='y';
+    int highscore=0;
+    while (repeat=='y'){
+    int score=0;
+    bool wasit=true;
+    int x=9;
+    int rintangan[3]; // the y-asis of obstacle
+    int rintang[3]; // the x-asis of obstacle
+    rintang[0]=10;
+    rintang[1]=18;
+    rintang[2]=27; // the starting x-asis of obstacle
+    for (int i=0;i<3;i++)
+    {
+        rintangan[i]=(rand()-1)%12+2;
+    }
+    string map[20][30];
+    for (int i=0;i<20;i++)
+    {
+        for (int j=0;j<30;j++)
+        {
+            if ( i==0 || i==19|| j==29 || j==0)
+                map[i][j]="* ";
+            else
+                map[i][j]="  ";
+        }
+    }
+    while (wasit == true)
+    {
+        for (int i =0;i<3;i++)
+        {
+            for (int j=1;j<19;j++)
+            {
+                map[j][rintang[i]]="  ";
+            }
+        }
+        for (int i=0;i<3;i++) //make the obstacle move from right to left
+        {
+            rintang[i]--;
+        }
+        for (int i =0;i<3;i++) //make the obstacle back to right side if it touched left side
+        {
+            for (int j=1;j<19;j++)
+            {
+                map[j][rintang[i]]="* ";
+            }
+        }
+        for (int i=0;i<3;i++) //to make a hole at the obstacle
+        {
+            map[rintangan[i]][rintang[i]]="  ";
+            map[rintangan[i]+1][rintang[i]]="  ";
+            map[rintangan[i]+2][rintang[i]]="  ";
+            map[rintangan[i]+3][rintang[i]]="  ";
+            map[rintangan[i]+4][rintang[i]]="  ";
+        }
+        for (int i=0;i<3;i++)
+        {
+            if (rintang[i]==1)
+                {rintang[i]=28;
+                rintangan[i]=(rand()-1)%12+2;
+                }
+        }
+        map[x][3]="  ";
+        if (kbhit())
+        {
+            mv=getch();
+            x=x-3;
+        }
+        x++;
+        if(x<1)
+            x=1;
+        for (int i=0;i<3;i++)
+        {
+            if (rintang[i]==3)
+                if (map[x][3]=="  ")
+                    score=score+1;
+                if (map[x][3]=="* ")
+                    wasit=false;
+        }
+        map[x][3]="& ";
+        for (int i=1;i<19;i++)
+        {
+            map[i][1]="  ";
+        }
+        for (int i=0;i<20;i++)
+        {
+            for (int j=0;j<30;j++)
+            {
+                cout << map[i][j];
+            }
+        cout <<endl;
+        }
+        cout << "Score = "<<score;
+    Sleep (100);
+    system ("cls");
+    }
+    cout << "Score = " <<score<<endl;
+    if (highscore<score)
+        highscore=score;
+    cout << "Highscore= "<<highscore<<endl;
+    cout << "retry?(y/n) = "; cin >>repeat;}
+    return 0;
+}
+
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
